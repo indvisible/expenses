@@ -22,6 +22,7 @@ describe "User", ->
 				async.parallel [
 					(done) -> (new User email: "bob@gmail.com").save done
 					(done) -> (new User email: "peter@gmail.com").save done
+					(done) -> (new User email: "mike@gmail.com", username: "Mike").save done
 				], done
 			], done
 
@@ -42,4 +43,26 @@ describe "User", ->
 			User.getByEmail "greatnewemail@gmail.com", (error, user) ->
 				user.email.should.eql "greatnewemail@gmail.com"
 				user.googleId.should.eql "3l5jhkg235hjt545"
+				done()
+
+	describe "#getByUserNameOrEmail()", ->
+		it "should get user with login", (done) ->
+			User.getByUserNameOrEmail username: "mike@gmail.com", (error, user) ->
+				user.email.should.eql "mike@gmail.com"
+			done()
+
+		it "should get user with email", (done) ->
+			User.getByUserNameOrEmail username: "Mike", (error, user) ->
+				user.email.should.eql "mike@gmail.com"
+			done()
+
+	describe "#save()", ->
+
+		it "should perform lower case conversion of email and username on save", (done) ->
+			model = new User
+				email: "SomeGreatEmail@GMAIL.Com"
+				username: "MyUsername"
+			model.save (error) ->
+				model.email.should.eql "somegreatemail@gmail.com"
+				model.username.should.eql "myusername"
 				done()
