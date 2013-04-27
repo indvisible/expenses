@@ -29,6 +29,8 @@
     "datejs": "0.0.2",
     "should": "~1.2.2",
     "socket.io": "~0.9.14",
-    "sinon": "~1.6.0"
+    "sinon": "~1.6.0",
+    "bcrypt": "~0.7.5",
+    "passport-local": "~0.1.6"
   }
 }

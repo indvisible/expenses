@@ -19,4 +19,10 @@ define ["routing", "controllers"], (routing, controllers) ->
 				"analytics": url: "history", action: "showHistory"
 			controller:
 				controllers.HistoryController
+		new RouteCollection
+			appRoutes:
+				"login": url: "login", action: "showLogin"
+				"sing-up": url: "signup", action: "showSignUp"
+			controller:
+				controllers.AuthController
 	]

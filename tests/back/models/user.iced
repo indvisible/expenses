@@ -39,22 +39,23 @@ describe "User", ->
 				googleId: "3l5jhkg235hjt545",
 				email: "greatnewemail@gmail.com"
 			User.getOrCreateByGoogleId params, (error, user) ->
-				throw error if error?
+
 			User.getByEmail "greatnewemail@gmail.com", (error, user) ->
 				user.email.should.eql "greatnewemail@gmail.com"
 				user.googleId.should.eql "3l5jhkg235hjt545"
 				done()
 
-	describe "#getByUserNameOrEmail()", ->
-		it "should get user with login", (done) ->
-			User.getByUserNameOrEmail username: "mike@gmail.com", (error, user) ->
-				user.email.should.eql "mike@gmail.com"
-			done()
+	describe "#getByUsernameOrEmail()", ->
 
-		it "should get user with email", (done) ->
-			User.getByUserNameOrEmail username: "Mike", (error, user) ->
+		it "should get user by username", (done) ->
+			User.getByUsernameOrEmail login: "mike@gmail.com", (error, user) ->
 				user.email.should.eql "mike@gmail.com"
-			done()
+				done()
+
+		it "should get user by email", (done) ->
+			User.getByUsernameOrEmail login: "Mike", (error, user) ->
+				user.email.should.eql "mike@gmail.com"
+				done()
 
 	describe "#save()", ->
 
@@ -65,4 +66,4 @@ describe "User", ->
 			model.save (error) ->
 				model.email.should.eql "somegreatemail@gmail.com"
 				model.username.should.eql "myusername"
-				done()
+			done()

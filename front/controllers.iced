@@ -66,6 +66,14 @@ define ["bus", "views", "models"], (bus, views, models) ->
 	exports.AuthController = 
 		showLogin: ->
 			bus.trigger "show", new views.Login
+		showSignUp: ->
+			view = new views.SignUp 
+				model: new models.Login
+			bus.trigger "show", view
+
+			view.on "done", ->
+				view.model.save()
+				bus.trigger "navigate", "#success"
 
 	exports.HistoryController = 
 		showHistory:->

@@ -22,6 +22,8 @@ html
 			a.button(href="#history/week") show this week
 			a.button(href="#history/month") show this month
 			a.button(href="#history") show everything
+			a.button(href="#login") login
+			a.button(href="logout") logout
 
 		script#option-template(type="text/template")
 			button.option {{=it.name}}
@@ -40,7 +42,18 @@ html
 			a.button(href="#") cancel
 
 		script#login-template(type="text/template")
-			a.button(href="/auth/google") Login via Google
+			a.button(href="#signup")
+				| New in system? Sign Up!
+			form(action="/login", method="post")
+				mixin field("Email or username", "login")
+				mixin field("Password", "password", "password")
+				input.button(type="submit", value="Log In")
+
+		script#signup-template(type="text/template")
+			mixin field("Username", "username")
+			mixin field("Email", "email")
+			mixin field("Password", "password", "password")
+			button#signup Sign Up
 
 		script#statistics-template(type="text/template")
 			h1 history

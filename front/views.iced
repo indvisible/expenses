@@ -56,6 +56,22 @@ define ["marionette", "highcharts_exporting", "highcharts", "jquery", "linqjs"],
 	exports.Login = Marionette.ItemView.extend
 		template: "#login-template"
 
+	exports.SignUp = Marionette.ItemView. extend
+		template: "#signup-template"
+		ui:
+			username: "#username"
+			email: "#email"
+			password: "#password"
+		events:
+			"click #signup": "signUp"
+
+		signUp: ->
+			@model.set
+				email: @ui.email.val()
+				username: @ui.username.val()
+				password: @ui.password.val()
+			@trigger "done"
+
 	exports.HistoryItem = HistoryItem = Marionette.ItemView.extend
 		template: "#history-item-template"
 

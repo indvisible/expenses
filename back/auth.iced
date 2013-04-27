@@ -1,21 +1,25 @@
 passport = require 'passport'
 models = require "./models/models"
-GoogleStrategy = require("passport-google-oauth").OAuth2Strategy
 Backdoor = require './backdoor'
+LocalStrategy = require('passport-local').Strategy
 
-GoogleAuthStrategy = new GoogleStrategy
-  clientID: "836427388747.apps.googleusercontent.com",
-  clientSecret: "lMF07R7txxWa_scy0S1D_y6Y",
-  callbackURL: "http://localhost:3000/oauth2callback",
-  (accessToken, refreshToken, profile, done) ->
-    models.User.getOrCreateByGoogleId
-      googleId: profile._json.id, 
-      email: profile._json.email
-      , (err, user) ->
-        done err, user
+LocalStrategy = new LocalStrategy(
+  (username, password, done) ->
+    User.getByUsernameOrEmail parameter: username
+    , (err, user) ->
+      return done(err) if err
+      return done(null, false) unless user
+      return done(null, false) unless user.verifyPassword(password)
+      done null, user
+)
 
-passport.use Backdoor
-passport.use GoogleAuthStrategy
+passport.initialize()
+passport.session()
+
+#passport.use Backdoor
+passport.use LocalStrategy
+
+passport.use 
 
 passport.serializeUser (user, done) ->
   done null, user._id
@@ -24,36 +28,25 @@ passport.deserializeUser (obj, done) ->
   models.User.getById obj, (err, user) ->
     done null, user
 
-authGoogle = (req, res) ->
-  passport.authenticate('google', 
-    { successRedirect: '/', 
-    failureRedirect: '/login' , 
-    scope: ['https://www.googleapis.com/auth/userinfo.profile',
-            'https://www.googleapis.com/auth/userinfo.email'] })
-
-oauth2callback = (req, res) ->
-  passport.authenticate('google', { successRedirect: '/login', failureRedirect: '/#login' })
-  (req, res) ->
-    res.redirect '/login'
-
 logout = (req, res) ->
     req.logout()
     res.redirect('/')
 
 login = (req, res) ->
-  res.json user: req.user
+  passport.authenticate(
+    'local', 
+    failureRedirect: '/error' )
+  (req, res) ->
+    res.redirect '/'
+
+signUp = (req, res) ->
+
 
 module.exports = (req, res, next) ->
-  passport.initialize().apply @, arguments
-  passport.session().apply @, arguments 
   switch req.url
     when "/logout"
       logout req, res
-    when "/login"
+    when "/login" and req.method == 'POST'
       login req, res
-    when "/oauth2callback"
-      oauth2callback req, res
-    when "/auth/google"
-      authGoogle req, res
     else
       next()

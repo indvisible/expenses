@@ -36,3 +36,15 @@ module.exports =
 		index: (req, res) ->
 			models.Price.getLatest req.query.item, req.query.place, (error, price) ->
 				respond([req, res]) error, price
+	users:
+		create: (req, res) ->
+			console.log "creating user"
+			await models.User.create req.body.password, defer err, credentials
+			console.log "before save"
+			new models.User(
+				username: username,
+				email: email,
+				passwordSalt: credentials.Salt,
+				passwordHash: credentials.Hash
+			).save respond(arguments)
+

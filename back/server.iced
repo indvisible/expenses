@@ -8,7 +8,6 @@ mongoose = require "mongoose"
 models = require "./models/models"
 auth = require "./auth"
 http = require 'http'
-socket = require 'socket.io'
 bus = require './bus'
 
 connectionString = process.env.CONNECTION_STRING or "mongodb://localhost/expenses"
@@ -20,7 +19,6 @@ mongoose.connect connectionString, (error) ->
 
 app = express()
 server = http.createServer app
-io = socket.listen server
 
 frontDir = __dirname + "/../front"
 
@@ -33,7 +31,7 @@ app.use express.session
 app.use lessCompiler frontDir
 app.use icedCompiler frontDir
 
-# app.use auth
+app.use auth
 
 app.set "view engine", "jade"
 app.set "views", frontDir
@@ -41,19 +39,22 @@ app.set "views", frontDir
 app.get "/", (req, res) ->
 	res.render "app"
 
-guard = (req, res, next) ->
-	return res.send 403 if not req.isAuthenticated()
-	next()
+#guard = (req, res, next) ->
+#	return res.send 403 if not req.isAuthenticated()
+#	next()
+#handle403 = (err, req, res, next)->
+#  if err.status != 403
+#    next()
+#  log.info "Not authorised!"
 
-# app.all "/expenses", guard
+#app.all "/expenses", guard
+#app.use handle403
 
 app.resource "expenses", resources.expenses
+app.resource "users", resources.users
 app.resource "items", resources.items
 app.resource "places", resources.places
 app.resource "prices", resources.prices
-
-bus.on "add:expense", (expense) ->
-	io.sockets.emit "add:expense", expense
 
 server.listen port, -> 
 	log.info "Listening on #{port}..."
