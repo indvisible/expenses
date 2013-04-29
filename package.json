@@ -4,7 +4,7 @@
   "description": "Expenses tracking and analysis system",
   "main": "back/server.iced",
   "scripts": {
-    "start": "nodemon --exec iced back/server.iced",
+    "start": "nodemon --exec iced ./back/server.iced",
     "test": "mocha --compilers iced:iced-coffee-script --recursive tests -R spec -r should"
   },
   "repository": "https://github.com/titarenko/expenses",
@@ -28,9 +28,7 @@
     "passport-google-oauth": "~0.1.5",
     "datejs": "0.0.2",
     "should": "~1.2.2",
-    "socket.io": "~0.9.14",
     "sinon": "~1.6.0",
-    "passport-local": "~0.1.6",
-    "bcrypt-nodejs": "0.0.3"
+    "nodemon": "~0.7.6"
   }
 }
