@@ -38,9 +38,7 @@ module.exports =
 				respond([req, res]) error, price
 	users:
 		create: (req, res) ->
-			console.log "creating user credentials"
 			await models.User.createCredentials req.body.password, defer err, credentials
-			console.log "before save user"
 			new models.User(
 				username: req.body.username,
 				email: req.body.email,

@@ -73,7 +73,7 @@ define ["bus", "views", "models"], (bus, views, models) ->
 
 			view.on "done", ->
 				view.model.save()
-				bus.trigger "navigate", "#success"
+				bus.trigger "navigate", "main-menu"
 
 	exports.HistoryController = 
 		showHistory:->

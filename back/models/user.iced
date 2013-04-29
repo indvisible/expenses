@@ -39,11 +39,8 @@ User.statics.removeAll = (done) ->
 	@collection.remove {}, {w: 0}, done
 
 User.statics.createCredentials = (password, done) ->
-	console.log "in Create Credentials method"
 	bcrypt.genSalt 15, 25, (err, salt) ->
-		console.log "salt=" + salt
 		bcrypt.hash password, salt, (err, hash)->
-			console.log "hash=" + hash
 			credentials = {
 					Salt: salt,
 					Hash: hash
