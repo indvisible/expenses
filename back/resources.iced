@@ -38,13 +38,12 @@ module.exports =
 				respond([req, res]) error, price
 	users:
 		create: (req, res) ->
-			console.log "creating user"
-			await models.User.create req.body.password, defer err, credentials
-			console.log "before save"
+			console.log "creating user credentials"
+			await models.User.createCredentials req.body.password, defer err, credentials
+			console.log "before save user"
 			new models.User(
-				username: username,
-				email: email,
+				username: req.body.username,
+				email: req.body.email,
 				passwordSalt: credentials.Salt,
 				passwordHash: credentials.Hash
 			).save respond(arguments)
-
