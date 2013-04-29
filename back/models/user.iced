@@ -47,6 +47,13 @@ User.statics.createCredentials = (password, done) ->
 				}
 			done null, credentials
 
+User.statics.comparePassword = (user, password, done) ->
+	bcrypt.compare password, user.passwordHash, (err, res) ->
+		if err?
+			return done "password is not matched", false 
+		done null, true
+
+
 User.pre "save", (next) ->
 	@username = @username?.toLowerCase()
 	@email = @email?.toLowerCase()
