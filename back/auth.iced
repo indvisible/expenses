@@ -14,7 +14,7 @@ module.exports = (app) ->
 		callbackURL: "http://localhost:3000/accept/google/",
 		(accessToken, refreshToken, profile, done) ->
 			User.getOrCreateByGoogleId
-				googleId: profile._json.id ,
+				googleId: profile._json.id,
 				email: profile._json.email,
 				done()
 
